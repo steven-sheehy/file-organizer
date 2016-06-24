@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# sudo python3 -m pip install titlecase
 
 import os
 import re
@@ -10,7 +9,12 @@ import inspect
 import logging
 import readline
 import signal
-from titlecase import titlecase
+
+try:
+  from titlecase import titlecase
+except:
+  print("titlecase package required: python -m pip install titlecase")
+  exit(1)
 
 signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
