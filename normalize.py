@@ -130,7 +130,7 @@ acronyms = Literals("AKA", "C2C", "DC", "TV", "UFO", "UK", "USA")
 foreign = Literals("al", "chan", "de", "du", "et", "ga", "kun", "ni", "-san", "und", "wa", "wo")
 groups = Literals("CHD", "d'argh", "DCP", "DTG", "FTG", "HP", "JYK", "LGC", "LOL", "n0m1", "PSA", "QCF", "RARBG", "RMTeam", "UTR", "YSTeam")
 metadata = Literals("1CH", "2CH", "6CH", "7CH", "AAC", "AC3", "azw3", "BluRay", "CD", "DL", "DTS", "DVD", "epub", "FLAC", "HDTV", "HEVC", "mobi", "MKV", "MP3", "pdf", "x264", "x265", "Xvid")
-miscellaneous = Literals("C-3PO", "com", "iZombie")
+miscellaneous = Literals("C-3PO", "com", "iZombie", "LEGO")
 numerals = Literals("II", "III", "IV", "VI", "VII", "VIII", "IX")
 literals = Literals(copy=[acronyms, foreign, groups, metadata, miscellaneous, numerals])
 possessives = Literals("Bob", "Marvel", "DC", "Childhood", "there", "Attenborough", "who")
@@ -166,8 +166,8 @@ preSubstitutions = [
 ]
 
 postSubstitutions = [
-  Substitution(r'(- )?\bs?(\d\d)[\. ]?(e|x|ep)(\d\d)\b( -)?', r'S\2E\4'),           # s01e04 -> S01E04
-  Substitution(r'(- )?\bs?(\d)[\. ]?[ex](\d\d)\b( -)?', r'S0\2E\3'),                # s01e04 -> S01E04
+  Substitution(r'(- )?\bs?(\d\d)[\. ]?(e|x|ep)[\. ]?(\d\d)\b( -)?', r'S\2E\4'),     # s01e04 -> S01E04
+  Substitution(r'(- )?\bs?(\d)[\. ]?[e|x|ep][\. ]?(\d\d)\b( -)?', r'S0\2E\3'),      # s01e04 -> S01E04
   Substitution(r'\b(\d)of\d\b', r'S01E0\1'),                                        # 4of6 -> S01E04
   Substitution(r'(^|(?<= ))(?:[a-z] ){2,}', lambda m: m.group(0).upper().replace(' ', '.') + ' '),  # A D -> A.D.
   Substitution(r'(?<=\b\d) (?=\d\b)', '.'),                                         # 5 1 -> 5.1
