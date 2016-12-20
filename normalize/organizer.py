@@ -1,41 +1,16 @@
-#!/usr/bin/env python3
 
 from collections import Counter
-import argparse
 import logging
 import os
 import re
-import sys
+
+logger = logging.getLogger(__name__)
 
 audio  = ["aac", "ape", "flac", "m4a", "m4p", "mka", "mp3", "oga", "ogg", "wma"]
 books  = ["awz3", "awz", "chm", "djvu", "epub", "fb2", "htm", "html", "ibooks", "kf8", "lit", "mobi", "opf", "pdb", "pdf", "prc", "ps", "rtf"]
 comics = ["cb7", "cba", "cbr", "cbt", "cbz"]
 manga  = ["7z", "rar", "zip"]
 video  = ["avi", "mkv", "m4v", "mov", "mp4", "mpeg", "mpg", "ogv", "qt", "rmvb", "vob", "webm", "wmv"]
-
-parser = argparse.ArgumentParser(description = 'Organizes files by sorting them into an output folder by media type and other rules.')
-parser.add_argument('directory', action='store', default='.', nargs='?', help='The input directory')
-parser.add_argument('-i', '--interactive', action='store_true', default=False, help='Request permission before moving a file')
-parser.add_argument('-l', '--log', action='store_true', default=False, help='Log output to file')
-parser.add_argument('-n', '--dry-run', action='store_true', default=False, help='Perform a trial run with no files moved')
-parser.add_argument('-o', '--output', action='store', default='../organized/', metavar='dir', help='The output directory for the organized files')
-parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Increase the verbosity level')
-args = parser.parse_args()
-
-level = logging.DEBUG if args.verbose else logging.INFO
-logger = logging.getLogger()
-logger.setLevel(level)
-
-consoleHandler = logging.StreamHandler(stream=sys.stdout)
-logger.addHandler(consoleHandler)
-logger = logger.getChild(__name__)
-
-if args.log:
-  logfile = os.path.join(args.directory, "organizer.log")
-  formatter = logging.Formatter("%(asctime)s [%(levelname)s]\t%(message)s")
-  fileHandler = logging.FileHandler(logfile)
-  fileHandler.setFormatter(formatter)
-  logger.addHandler(fileHandler)
 
 class TypeMapping:
   def __init__(self, destination, extensions, pattern=""):
@@ -122,9 +97,4 @@ class Organizer:
 
     logger.info('[%-6s] %s', type.destination, os.path.basename(file))
     return os.path.join(self.output, type.destination)
-
-try:
-  Organizer().process()
-except KeyboardInterrupt:
-  pass
 
