@@ -11,13 +11,13 @@ def main():
   parser.add_argument('directory', action='store', default='.', nargs='?', help='The input directory')
   parser.add_argument('-i', '--interactive', action='store_true', default=False, help='Request permission before renaming or moving a file')
   parser.add_argument('-l', '--log', action='store_true', default=False, help='Log output to file')
-  parser.add_argument('-m', '--max-length', action='store', type=int,  default=140, metavar='len', help='The maximum filename length. Default is 140 characters.')
-  parser.add_argument('-n', '--dry-run', action='store_true', default=False, help='Perform a trial run with no files renamed')
+  parser.add_argument('-m', '--max-length', action='store', type=int,  default=140, metavar='len', help='The maximum filename length. Default is 140 characters')
+  parser.add_argument('-n', '--dry-run', action='store_true', default=False, help='Perform a trial run with no files modified')
   parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Increase the verbosity level')
   parser.add_argument('-o', '--output', action='store', default='../organized/', metavar='dir', help='The output directory for the organized files')
   args = parser.parse_args()
 
-  logfile = "normalize.log"
+  logfile = "organizer.log"
   level = logging.DEBUG if args.verbose else logging.INFO
   logger = logging.getLogger()
   logger.setLevel(level)

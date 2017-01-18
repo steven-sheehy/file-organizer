@@ -4,12 +4,13 @@ from normalize.literal import *
 from normalize.substitution import *
 
 skippedFiles = set(['cover.jpg', 'metadata.opf', '.DS_Store'])
-deleteFiles = set(['__MACOSX', '.DS_Store'])
+deleteFiles = set(['__MACOSX', '.DS_Store', '*.website', '*.url', '*.part', '*sample*'])
+# rename "Featurettes" to "Extras"
 manga  = Literals("7z", "rar", "zip")
 dir = Literals("")
 
 abbreviations = Literals("Ave", "Bros", "Dr", "Jr", "Mr", "Mrs", "Ms", "Rev", "St", "vs")
-acronyms = Literals("AKA", "C2C", "DC", "OVA", "TV", "UFO", "UK", "USA")
+acronyms = Literals("AKA", "C2C", "DC", "LLC", "OVA", "TV", "UFO", "UK", "USA")
 foreign = Literals("al", "chan", "de", "du", "et", "ga", "kun", "ni", "-san", "und", "wa", "wo")
 groups = Literals("CHD", "d'argh", "DCP", "DTG", "FTG", "HP", "JYK", "LGC", "LOL", "n0m1", "PSA", "QCF", "RARBG", "RMTeam", "UTR", "YSTeam")
 metadata = Literals("480p", "720p", "1080p", "1CH", "2CH", "6CH", "7CH", "AAC", "AC3", "azw3", "BluRay", "CD", "DL", "DTS", "DVD", "DVDRip", "epub", "FLAC", "HDTV", "HEVC", "mobi", "MKV", "MP3", "pdf", "x264", "x265", "Xvid")

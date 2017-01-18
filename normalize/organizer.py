@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 
 from collections import Counter
 import logging
 import os
 import re
+import shutil
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +45,36 @@ class Organizer:
     for mapping in self.typeMappings:
       logger.debug('Registered Type Mapping: %s', mapping)
 
+  def process(self, source = args.directory):
+    files = sorted(os.listdir(source))
+    for file in files:
+      self.processFile(os.path.join(source, file))
+
+  def processFile(self, file):
+    try:
+      logger.debug("Processing: %s", file)
+      if os.path.exists(file):
+        destination = self.getDestination(file)
+        confirm = not args.dry_run
+
+        if args.interactive:
+          result = input(r" (Y/N) ").lower()
+          confirm = result == 'y' or result == 'yes'
+
+        if confirm:
+          shutil.move(file, os.path.join(destination, os.path.basename(file)))
+    except Exception as e:
+      logger.error("Unable to rename: %s", e)
+
+  def getDestination(self, file):
+    if os.path.isdir(file):
+      type = self.directoryType(file)
+    else:
+      type = self.fileType(file)
+
+    logger.info('[%-6s] %s', type.destination, os.path.basename(file))
+    return os.path.join(self.output, type.destination)
+
   def fileType(self, file):
     for typeMapping in self.typeMappings:
       if typeMapping.matches(file):
@@ -67,34 +99,4 @@ class Organizer:
       return types.most_common(1)[0][0]
     else:
       return self.unknownType
-
-  def process(self, source = args.directory):
-    files = sorted(os.listdir(source))
-    for file in files:
-      self.processFile(os.path.join(source, file))
-
-  def processFile(self, file):
-    try:
-      logger.debug("Processing: %s", file)
-      if os.path.exists(file):
-        destination = self.getDestination(file)
-        confirm = not args.dry_run
-
-        if args.interactive:
-          result = input(r" (Y/N) ").lower()
-          confirm = result == 'y' or result == 'yes'
-
-        if confirm:
-          os.renames(file, os.path.join(destination, os.path.basename(file)))
-    except Exception as e:
-      logger.error("Unable to rename: %s", e)
-
-  def getDestination(self, file):
-    if os.path.isdir(file):
-      type = self.directoryType(file)
-    else:
-      type = self.fileType(file)
-
-    logger.info('[%-6s] %s', type.destination, os.path.basename(file))
-    return os.path.join(self.output, type.destination)
 

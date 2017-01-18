@@ -18,7 +18,10 @@ class Normalization:
     return self.name
 
   def setName(self, name):
-    self.name = name.strip()
+    if self.extension != '' and name.endswith(self.extension):
+      self.name, ext = os.path.splitext(name)
+    else:
+      self.name = name.strip()
 
   def original(self, path=False):
     if path:
