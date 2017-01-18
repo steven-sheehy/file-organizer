@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Run sudo python3 setup.py install
 
 from setuptools import setup, find_packages
 
