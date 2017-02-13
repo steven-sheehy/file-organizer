@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+#
+# python3 -m unittest discover
 
 import unittest
-from normalize.cleaner import *
-from normalize.normalization import *
+from organizer.cleaner import *
+from organizer.normalization import *
 
-class TestNormalize(unittest.TestCase):
+class TestCleaner(unittest.TestCase):
 
   def setUp(self):
     self.cleaner = FileCleaner(Args())
@@ -23,14 +25,22 @@ class TestNormalize(unittest.TestCase):
     self.assertRenamed('Foo.epub', 'Foo epub', dir=True)
     self.assertUnchanged('06. Eazy-E - We Want Eazy (Feat. N.W.A. & the D.O.C.).mkv')
     self.assertRenamed('foo.s03e09.720p.5.1.webrip.hevc.x265.rmteam.mkv', 'Foo S03E09 720p 5.1 WebRip HEVC x265 RMTeam.mkv')
+    self.assertUnchanged('.50 Foo.mkv')
 
   def test_literals(self):
     self.assertUnchanged('De Foo.mkv')
     self.assertRenamed('de foo.mkv', 'De Foo.mkv')
     self.assertRenamed('foo de bar.mkv', 'Foo de Bar.mkv')
+    self.assertRenamed('i ii iii iv v vi vii viii ix x.mkv', 'I II III IV V VI VII VIII IX X.mkv')
 
   def test_acronym(self):
     self.assertUnchanged('A.B.C..mkv', 'A.B.C..mkv')
+    self.assertUnchanged('(A.B.C.).mkv')
+    self.assertUnchanged('Foo, A.B.C., Bar.mkv')
+    self.assertUnchanged('FOO.A. Bar.mkv')
+
+  def test_uppercase(self):
+    self.assertUnchanged('INFIX.mkv')
 
   def test_dashes(self):
     self.assertRenamed('Foo- Bar.mkv', 'Foo - Bar.mkv')
@@ -41,6 +51,7 @@ class TestNormalize(unittest.TestCase):
     self.assertRenamed('Foo꞉Bar.mkv', 'Foo - Bar.mkv')
     self.assertRenamed('Foo~Bar.mkv', 'Foo - Bar.mkv')
     self.assertRenamed('Foo–Bar.mkv', 'Foo - Bar.mkv')
+    self.assertUnchanged('Foo-bar.mkv')
 
   def test_parentheses(self):
     self.assertRenamed('(Foo)Bar.mkv', 'Bar (Foo).mkv')
@@ -73,6 +84,10 @@ class TestNormalize(unittest.TestCase):
     self.assertUnchanged('Marvels.mkv')
     self.assertUnchanged('Bobsled Burgers.mkv')
 
+  def test_abbreviations(self):
+    self.assertRenamed('Dr Who.mkv', 'Dr. Who.mkv')
+    self.assertRenamed('DR Who.mkv', 'Dr. Who.mkv')
+
   def test_dd51(self):
     self.assertRenamed('Foo DD5.1.mkv', 'Foo DD 5.1.mkv')
 
@@ -90,6 +105,20 @@ class TestNormalize(unittest.TestCase):
     self.assertRenamed('Foo h.265.mkv', 'Foo x265.mkv')
     self.assertRenamed('Foo h 265.mkv', 'Foo x265.mkv')
     self.assertRenamed('Foo H265.mkv',  'Foo x265.mkv')
+
+  def test_volumes(self):
+    self.assertRenamed('Foo V2.zip', 'Foo v2.zip')
+    self.assertRenamed('Foo vol. 2.zip', 'Foo v2.zip')
+    self.assertRenamed('Foo vol2.zip', 'Foo v2.zip')
+    self.assertRenamed('Foo volume 2.zip', 'Foo v2.zip')
+    self.assertRenamed('Foo vol 2.zip', 'Foo v2.zip')
+    self.assertRenamed('Foo vol. a.zip', 'Foo Vol. A.zip')
+    self.assertUnchanged('Foo Vol. 2.cbz')
+    self.assertUnchanged('v2.zip')
+
+  def test_chapters(self):
+    self.assertRenamed('', '')
+    self.assertUnchanged('c2.zip')
 
   def test_max_length(self):
     self.cleaner.args.max_length = 8
