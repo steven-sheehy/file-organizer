@@ -1,8 +1,7 @@
-import sys
 import argparse
 import logging
 import signal
-from normalize.cleaner import *
+from organizer.cleaner import *
 
 def main():
   signal.signal(signal.SIGPIPE, signal.SIG_DFL)
@@ -13,23 +12,10 @@ def main():
   parser.add_argument('-l', '--log', action='store_true', default=False, help='Log output to file')
   parser.add_argument('-m', '--max-length', action='store', type=int,  default=140, metavar='len', help='The maximum filename length. Default is 140 characters')
   parser.add_argument('-n', '--dry-run', action='store_true', default=False, help='Perform a trial run with no files modified')
-  parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Increase the verbosity level')
   parser.add_argument('-o', '--output', action='store', default='../organized/', metavar='dir', help='The output directory for the organized files')
+  parser.add_argument('-s', '--semi-interactive', action='store_true', default=False, help='Manually confirm renaming the first file and automatically rename all other files in the same directory. Useful when a directory contains similarly named files. If the first file is edited or skipped, treat the rest of the folder as interactive.')
+  parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Increase the verbosity level')
   args = parser.parse_args()
-
-  logfile = "organizer.log"
-  level = logging.DEBUG if args.verbose else logging.INFO
-  logger = logging.getLogger()
-  logger.setLevel(level)
-
-  consoleHandler = logging.StreamHandler(stream=sys.stdout)
-  logger.addHandler(consoleHandler)
-
-  if args.log:
-    formatter = logging.Formatter("%(asctime)s [%(levelname)s]\t%(message)s")
-    fileHandler = logging.FileHandler(logfile)
-    fileHandler.setFormatter(formatter)
-    logger.addHandler(fileHandler)
 
   FileCleaner(args).process()
 

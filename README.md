@@ -1,9 +1,17 @@
 # file-organizer
 
+## Test
+
+  python3 -m unittest
+
 ## Install
 
+  sudo pip3 install titlecase
   sudo python3 setup.py install
 
+## Execute
+
+  organizer -i ~/Downloads/
 
 ## Uninstall
 

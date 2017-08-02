@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from normalize.literal import *
-from normalize.substitution import *
+from organizer.literal import *
+from organizer.substitution import *
 
 skippedFiles = set(['cover.jpg', 'metadata.opf', '.DS_Store'])
 deleteFiles = set(['__MACOSX', '.DS_Store', '*.website', '*.url', '*.part', '*sample*'])
@@ -49,18 +49,19 @@ preSubstitutions = [
 ]
 
 postSubstitutions = [
-  Substitution(r'(- )?\bs?(\d\d)[\. ]?(e|x|ep)[\. ]?(\d\d)\b( -)?', r'S\2E\4'),     # s01e04 -> S01E04
-  Substitution(r'(- )?\bs?(\d)[\. ]?[e|x|ep][\. ]?(\d\d)\b( -)?', r'S0\2E\3'),      # s01e04 -> S01E04
+  Substitution(r'(- )?\bs?(\d\d)[\. ]?[e|x|ep][\. ]?(\d\d)\b( -)?', r'S\2E\3'),     # s01e04 -> S01E04
+  Substitution(r'(- )?\bs?(\d)[\. ]?[e|x|ep][\. ]?(\d\d)\b( -)?', r'S0\2E\3'),      # s1e04 -> S01E04
+  Substitution(r'(- )?\b(e|ep)[\. ]?(\d\d)\b( -)?', r'S01E\3'),                     # Ep04 -> S01E04
   Substitution(r'\b(\d)of\d\b', r'S01E0\1'),                                        # 4of6 -> S01E04
-  Substitution(r'(^|(?<= ))(?:[a-z]( |$)){2,}', lambda m: m.group(0).upper().replace(' ', '.') + ' '),  # A D -> A.D.
-  Substitution(r'((?<=[a-z]\.){2,}) ?([a-z])$', r'\2.'),                              # U.S A.mkv -> U.S.A..mkv
+  Substitution(r'(^|(?<=[ \(\[]))(?:[a-z]( |$)){2,}', lambda m: m.group(0).upper().replace(' ', '.') + ' '),  # A D -> A.D.
+  Substitution(r'((?<=[a-z]\.){2,}) ?([a-z])$', r'\2.'),                            # U.S A.mkv -> U.S.A..mkv
   Substitution(r'(?<=\b\d) (?=\d\b)', '.'),                                         # 5 1 -> 5.1
   Substitution(r'\b(%s) ' % abbreviations.pattern, r'\1. '),                        # Dr -> Dr.
   Substitution(r'\b(%s)\b' % literals.pattern, literals.convert),                   # [rmteam] -> [RMTeam]
-  Substitution(r'\s+(\]|\))', r'\1'),                        # [1998 ] -> [1988]
-  Substitution(r'(\[|\()\s+', r'\1'),                        # [ 1998] -> [1988]
+  Substitution(r'\s+(\]|\))', r'\1'),                                               # [1998 ] -> [1988]
+  Substitution(r'(\[|\()\s+', r'\1'),                                               # [ 1998] -> [1988]
   Substitution(r'\bV(ol(ume|\.)? ?)?(\d+)\b', r'v\3', manga),                       # Vol. 01 -> v01
-  Substitution(r'\bV(\d+)(\b|(?=c\d+))', r'v\1'),                                              # V01 -> v01
+  Substitution(r'\bV(\d+)(\b|(?=c\d+))', r'v\1'),                                   # V01 -> v01
   Substitution(r'\bC(h(apters?|\.)?)? ?(\d+)\b', r'c\3', manga),                    # Chapters 001 -> c001
   Substitution(r'\bC(\d+)\b', r'c\1'),                                              # C001 -> c001
   Substitution(r'\[[a-f0-9]{8}\]', lambda m: m.group(0).upper()),                   # [Eb6cb498] -> [EB6CB498]

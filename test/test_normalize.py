@@ -34,13 +34,18 @@ class TestCleaner(unittest.TestCase):
     self.assertRenamed('i ii iii iv v vi vii viii ix x.mkv', 'I II III IV V VI VII VIII IX X.mkv')
 
   def test_acronym(self):
-    self.assertUnchanged('A.B.C..mkv', 'A.B.C..mkv')
+    self.assertRenamed('A.B C.mkv', 'A.B.C..mkv')
+    self.assertUnchanged('A.B.C..mkv')
     self.assertUnchanged('(A.B.C.).mkv')
     self.assertUnchanged('Foo, A.B.C., Bar.mkv')
     self.assertUnchanged('FOO.A. Bar.mkv')
+    self.assertUnchanged('A.B.C; Foo.mkv')	
 
   def test_uppercase(self):
-    self.assertUnchanged('INFIX.mkv')
+    self.assertUnchanged('ABC.mkv')
+    self.assertUnchanged('Side A.mkv')
+    self.assertUnchanged('Side A (Foo).mkv')
+    self.assertUnchanged('Side A [Foo].mkv')
 
   def test_dashes(self):
     self.assertRenamed('Foo- Bar.mkv', 'Foo - Bar.mkv')
@@ -117,8 +122,10 @@ class TestCleaner(unittest.TestCase):
     self.assertUnchanged('v2.zip')
 
   def test_chapters(self):
-    self.assertRenamed('', '')
     self.assertUnchanged('c2.zip')
+
+  def test_episodes(self):
+    self.assertRenamed('Foo Ep01.mkv', 'Foo S01E01.mkv')
 
   def test_max_length(self):
     self.cleaner.args.max_length = 8

@@ -7,8 +7,8 @@ import re
 logger = logging.getLogger(__name__)
 
 class Substitution:
-  def __init__(self, pattern, replacement, ext = None):
-    self.pattern = re.compile(pattern, flags=re.IGNORECASE|re.UNICODE)
+  def __init__(self, pattern, replacement, ext = None, flags = re.IGNORECASE|re.UNICODE):
+    self.pattern = re.compile(pattern, flags=flags)
     self.replacement = replacement
     self.ext = ext
 

@@ -18,7 +18,7 @@ setup(
     url='https://github.com/stevensheehy/file-organizer',
     license=license,
     packages=find_packages(exclude=('test', 'docs')),
-    entry_points={'console_scripts': ['organizer = normalize.main:main']},
-    test_suite='normalize'
+    entry_points={'console_scripts': ['organizer = organizer.main:main']},
+    test_suite='TestCleaner'
 )
 
