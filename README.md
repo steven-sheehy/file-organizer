@@ -1,19 +1,29 @@
 # file-organizer
 
+Renames filename to a standardized format. This includes removing underscores, dashes and converting to title case.
+
 ## Test
 
-  python3 -m unittest
+```shell
+python3 -m unittest
+```
 
 ## Install
 
-  sudo pip3 install titlecase
-  sudo python3 setup.py install
+```shell
+pip3 install titlecase
+python3 setup.py install
+```
 
 ## Execute
 
-  organizer -i ~/Downloads/
+```shell
+organizer -i ~/Downloads/
+```
 
 ## Uninstall
 
-  sudo python setup.py install --record files.txt
-  cat files.txt | xargs rm -rf
+```shell
+sudo python setup.py install --record files.txt
+cat files.txt | xargs rm -rf
+```
